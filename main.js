@@ -1,6 +1,3 @@
-// TODO: chrome backspace fix
-// TODO: Tab?
-
 let goalCount = 150;
 
 let currentElement = null;
