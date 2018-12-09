@@ -48,17 +48,18 @@ function handle(event) {
     if (isStart) {
         isStart = false;
         currentElement.innerText = "";
+        text.length = 1;
     }
 
     let chc = event.charCode;
     let key = event.key;
 
     if (isWhitespace(chc)) {
-        if (/^\s*$/.test(currentElement.innerText)) {
-            currentWhitespace.push(toWhitespace(chc));
-        } else {
-            newWord();
+        if (!/^\s*$/.test(currentElement.innerText)) {
+            newWord()
         }
+
+        currentWhitespace.push(toWhitespace(chc));
     } else if (chc === 8) {
         let current = currentElement.innerText;
 
@@ -70,6 +71,7 @@ function handle(event) {
 
         currentElement.innerText = current.slice(0, -1);
     } else {
+        updateProgressBar();
         currentElement.innerText += key;
     }
 
@@ -81,20 +83,17 @@ function newWord() {
     text.push(currentWhitespace.join("") + currentElement.innerText);
     currentWhitespace = [];
 
-    updateProgressBar();
-    activateDownload();
-
     currentElement.innerText = "";
     currentTextSize = initialTextSize;
     currentElement.style.fontSize = currentTextSize + "px";
-
-    wordCountElement.innerText = text.length;
 }
 
 function updateProgressBar() {
     wordCountElement.innerText = text.length;
     let percentage = (100. * text.length) / goalCount;
     wordCountElement.style.width = percentage > 100 ? 100 : percentage + '%';
+
+    activateDownload()
 }
 
 function bleeding() {
@@ -124,8 +123,8 @@ function upsizeToFit() {
 }
 
 function download() {
-    text.push(currentElement.innerText);
-    window.open('data:application/octet-stream,' + text.join(""), 'SAVE')
+    text.push(currentWhitespace.join("") + currentElement.innerText);
+    window.open('data:application/octet-stream,' + encodeURIComponent(text.join("")), 'SAVE')
     text.pop();
 }
 
