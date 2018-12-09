@@ -1,0 +1,20 @@
+{
+  "name": "Skunk",
+  "version": "0.5.0",
+  "description": "A text editor that smells like a skunk",
+  "main": "electron.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "repository": "https://github.com/alchemistake/skunk.git",
+  "keywords": [
+    "Skunk",
+    "text",
+    "zen"
+  ],
+  "author": "Alchemistake & Begüm Özcan",
+  "license": "",
+  "devDependencies": {
+    "electron": "^3.0.7"
+  }
+}

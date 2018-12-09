@@ -1,4 +1,4 @@
-let goalCount = 150;
+let goalCount = 5;
 
 let currentElement = null;
 let wordCountElement = null;
@@ -12,20 +12,40 @@ let text = [];
 let currentTextSize;
 let initialTextSize;
 
+const whitespace =
+    {
+        9: "\t",
+        13: "\n",
+        32: " "
+    };
+
+const ignored =
+    {
+        16: "",
+        17: "",
+        18: "",
+        20: "",
+        27: "",
+        91: "",
+        93: "",
+        112: "",
+        113: "",
+        114: "",
+        115: "",
+        116: "",
+        117: "",
+        118: "",
+        119: "",
+        120: "",
+        121: "",
+        122: "",
+        123: "",
+    };
+
 function parseURLparameters() {
     let url = new URL(window.location.href);
     let goalParameter = url.searchParams.get("goalCount");
     goalCount = goalParameter ? goalParameter : goalCount;
-}
-
-function isWhitespace(code) {
-    return code === 32 || code === 13;
-}
-
-function toWhitespace(code) {
-    if (code === 13)
-        code = 10;
-    return String.fromCharCode(code);
 }
 
 function setup() {
@@ -38,7 +58,7 @@ function setup() {
 
     parseURLparameters();
 
-    document.onkeypress = handle;
+    document.onkeydown = handle;
 }
 
 function handle(event) {
@@ -48,15 +68,15 @@ function handle(event) {
         text.length = 1;
     }
 
-    let chc = event.charCode;
+    let chc = event.which;
     let key = event.key;
 
-    if (isWhitespace(chc)) {
+    if (whitespace[chc] !== undefined) {
         if (!/^\s*$/.test(currentElement.innerText)) {
             newWord()
         }
 
-        currentWhitespace.push(toWhitespace(chc));
+        currentWhitespace.push(whitespace[chc]);
     } else if (chc === 8) {
         let current = currentElement.innerText;
 
@@ -67,7 +87,7 @@ function handle(event) {
         }
 
         currentElement.innerText = current.slice(0, -1);
-    } else {
+    } else if (ignored[chc] !== "") {
         updateProgressBar();
         currentElement.innerText += key;
     }
