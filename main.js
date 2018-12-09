@@ -65,7 +65,6 @@ function handle(event) {
     if (isStart) {
         isStart = false;
         currentElement.innerText = "";
-        text.length = 1;
     }
 
     let chc = event.which;
@@ -80,14 +79,26 @@ function handle(event) {
     } else if (chc === 8) {
         let current = currentElement.innerText;
 
-        if (current === "") {
-            if (text.length === 0)
-                return;
-            current = text.pop();
-        }
+        try {
+            if (current === "") {
+                current = text.pop();
+            }
 
-        currentElement.innerText = current.slice(0, -1);
+            current = current.slice(0, -1);
+
+            if (current === "") {
+                text.length = 0;
+            }
+        } catch (err) {
+            text.length = 0;
+        } finally {
+            currentElement.innerText = current;
+            updateProgressBar();
+        }
     } else if (ignored[chc] !== "") {
+        if(text.length === 0){
+            text.length = 1;
+        }
         updateProgressBar();
         currentElement.innerText += key;
     }
