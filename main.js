@@ -1,4 +1,4 @@
-let goalCount = 5;
+let goalCount = 1000;
 
 let currentElement = null;
 let wordCountElement = null;
@@ -26,6 +26,10 @@ const ignored =
         18: "",
         20: "",
         27: "",
+        37: "",
+        38: "",
+        39: "",
+        40: "",
         91: "",
         93: "",
         112: "",
@@ -79,24 +83,19 @@ function handle(event) {
     } else if (chc === 8) {
         let current = currentElement.innerText;
 
-        try {
-            if (current === "") {
-                current = text.pop();
-            }
-
-            current = current.slice(0, -1);
-
-            if (current === "") {
-                text.length = 0;
-            }
-        } catch (err) {
+        if (current === "" && text.length > 1) {
+            current = text.pop();
+        } else if (text.length === 1) {
             text.length = 0;
-        } finally {
-            currentElement.innerText = current;
-            updateProgressBar();
+            current = "";
+        } else {
+            current = current.slice(0, -1);
         }
-    } else if (ignored[chc] !== "") {
-        if(text.length === 0){
+
+        currentElement.innerText = current;
+        updateProgressBar();
+    } else if (ignored[chc] === undefined) {
+        if (text.length === 0) {
             text.length = 1;
         }
         updateProgressBar();

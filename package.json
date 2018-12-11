@@ -1,7 +1,7 @@
 {
   "name": "Skunk",
   "version": "0.5.0",
-  "description": "A text editor that smells like a skunk",
+  "description": "A writing app that smells like a skunk",
   "main": "electron.js",
   "scripts": {
     "start": "electron ."
