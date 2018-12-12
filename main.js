@@ -87,7 +87,7 @@ function onKeyDown(event) {
             current = text.pop();
         }
         // If there is no current and no previous word
-        else if (text.length === 1) {
+        else if (current === "" && text.length === 1) {
             text.length = 0;
             current = "";
         }
@@ -128,28 +128,13 @@ function updateProgressBar() {
     activateDownload()
 }
 
-function isCurrentOversize() {
-    const top = currentElement.offsetTop;
-    const left = currentElement.offsetLeft;
-    const width = currentElement.offsetWidth;
-    const height = currentElement.offsetHeight;
-
-    return top < window.pageYOffset
-        || (top + height) > (window.pageYOffset + window.innerHeight)
-        || left < window.pageXOffset
-        || (left + width) > (window.pageXOffset + window.innerWidth);
-}
-
 function resizeCurrent() {
-    while (currentTextSize > 0 && isCurrentOversize()) {
-        currentTextSize -= 1;
-        currentElement.style.fontSize = currentTextSize + "px";
-    }
+    let elementWidth = currentElement.offsetWidth;
+    let windowWidth = window.innerWidth;
+    let widthBound = Math.floor(windowWidth * currentTextSize / elementWidth);
 
-    while (currentTextSize < initialTextSize && !isCurrentOversize()) {
-        currentTextSize += 1;
-        currentElement.style.fontSize = currentTextSize + "px";
-    }
+    currentTextSize = Math.min(widthBound, initialTextSize);
+    currentElement.style.fontSize = currentTextSize + "px";
 }
 
 function download() {
