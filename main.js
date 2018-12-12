@@ -1,4 +1,4 @@
-let goalCount = 1000;
+let goalCount = 5;
 
 let currentElement = null;
 let wordCountElement = null;
@@ -85,7 +85,12 @@ function onKeyDown(event) {
         // If there is no current and previous word
         if (current === "" && text.length > 1) {
             current = text.pop();
+            currentWhitespace = [];
+            console.log(current.slice(0, whitespaceIndex(current) + 1).split(""));
+            currentWhitespace.push(current.slice(0, whitespaceIndex(current)));
+            current = current.trim()
         }
+
         // If there is no current and no previous word
         else if (current === "" && text.length === 1) {
             text.length = 0;
@@ -139,8 +144,22 @@ function resizeCurrent() {
 
 function download() {
     text.push(currentWhitespace.join("") + currentElement.innerText);
-    window.open('data:application/octet-stream,' + encodeURIComponent(text.join("")), 'SAVE');
+
+    let hiddenElement = document.createElement('a');
+
+    hiddenElement.href = 'data:attachment/text,' + encodeURIComponent(text.join(""));
+    hiddenElement.target = '_blank';
+    hiddenElement.download = 'skunk.txt';
+    hiddenElement.click();
+
     text.pop();
+}
+
+function whitespaceIndex(string) {
+    for (let i = 0; i < string.length; i++) {
+        if (! /\s/.test(string.charAt(i)))
+            return i;
+    }
 }
 
 function activateDownload() {
