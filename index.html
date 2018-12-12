@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="full-size">
 <head>
     <meta charset="UTF-8">
     <title>Skunk</title>
@@ -10,11 +10,18 @@
 
     <script src="main.js"></script>
 </head>
-<body class="skunk" onload="setup()">
+<body class="skunk full-size">
+<div id="entry" class="full-size">
+    <div class="anti-skunk" id="title" onclick="startWriting()">Skunk!</div>
+    <div id="goal">Goal Count: <input class="skunk" type="number" value="100" min="1" id="goalCount"></div>
+</div>
+<div class="full-size" id="writing">
 <div id="progress">
     <div id="bar" class="anti-skunk">0</div>
 </div>
 <div id="current">Hello.</div>
+<div class="anti-skunk" id="finish" onclick="finish()">Finish</div>
+</div>
 <div class="anti-skunk" id="download" onclick="download()">Download</div>
 </body>
 </html>
