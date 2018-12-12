@@ -10,14 +10,32 @@
     text-align: center;
 }
 
-body, html {
+.full-size {
     height: 100%;
     min-height: 100%;
     max-height: 100%;
     width: 100%;
     min-width: 100%;
     max-width: 100%;
-    font-family: 'Playfair Display', serif !important;
+    font-family: 'Playfair Display', serif;
+}
+
+#writing {
+    display: none;
+}
+
+#editor {
+    text-align: left;
+    font-size: 2.2em;
+    padding: 0.6em;
+    overflow: scroll;
+}
+
+#title {
+    font-size: 15em;
+    position: relative;
+    top: 50%;
+    transform: translateY(-50%);
 }
 
 #current {
@@ -26,6 +44,10 @@ body, html {
     top: 50%;
     transform: translateY(-50%);
     display: inline-block;
+}
+
+#goal {
+    position: relative;
 }
 
 #progress {
@@ -38,7 +60,7 @@ body, html {
     width: 0;
 }
 
-#download {
+#download, #finish {
     visibility: hidden;
     width: 100%;
     position: fixed;

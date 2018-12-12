@@ -1,10 +1,10 @@
-let goalCount = 5;
+let goalCount = 1;
 
 let currentElement = null;
 let wordCountElement = null;
 
 let helloActive = true;
-let downloadActive = false;
+let finishActive = false;
 
 let currentWhitespace = [];
 let text = [];
@@ -46,7 +46,13 @@ const ignored =
         123: "",
     };
 
-function setup() {
+function startWriting() {
+    document.getElementById("writing").style.display = "block";
+
+    // Delete entry div
+    goalCount = document.getElementById("goalCount").value;
+    document.getElementById("entry").remove();
+
     // Setting up element references.
     currentElement = document.getElementById("current");
     wordCountElement = document.getElementById("bar");
@@ -86,7 +92,7 @@ function onKeyDown(event) {
         if (current === "" && text.length > 1) {
             current = text.pop();
             currentWhitespace = [];
-            console.log(current.slice(0, whitespaceIndex(current) + 1).split(""));
+
             currentWhitespace.push(current.slice(0, whitespaceIndex(current)));
             current = current.trim()
         }
@@ -130,7 +136,7 @@ function updateProgressBar() {
     let percentage = (100. * text.length) / goalCount;
     wordCountElement.style.width = percentage > 100 ? 100 : percentage + '%';
 
-    activateDownload()
+    activateFinish()
 }
 
 function resizeCurrent() {
@@ -143,28 +149,38 @@ function resizeCurrent() {
 }
 
 function download() {
-    text.push(currentWhitespace.join("") + currentElement.innerText);
-
     let hiddenElement = document.createElement('a');
 
-    hiddenElement.href = 'data:attachment/text,' + encodeURIComponent(text.join(""));
+    hiddenElement.href = 'data:attachment/text,' + encodeURIComponent(document.getElementById("editor").innerText);
     hiddenElement.target = '_blank';
     hiddenElement.download = 'skunk.txt';
     hiddenElement.click();
+}
 
-    text.pop();
+function finish() {
+    document.getElementById("download").style.visibility = "initial";
+
+    document.getElementById("writing").remove();
+    let editor = document.createElement("div");
+    editor.className = "full-size";
+    editor.id = "editor";
+    editor.contentEditable = true;
+
+    text.push(currentWhitespace.join("") + currentElement.innerText);
+    editor.innerText = text.join("");
+    document.body.append(editor);
 }
 
 function whitespaceIndex(string) {
     for (let i = 0; i < string.length; i++) {
-        if (! /\s/.test(string.charAt(i)))
+        if (!/\s/.test(string.charAt(i)))
             return i;
     }
 }
 
-function activateDownload() {
-    if (!downloadActive && goalCount <= text.length) {
-        downloadActive = true;
-        document.getElementById("download").style.visibility = "initial";
+function activateFinish() {
+    if (!finishActive && goalCount <= text.length) {
+        finishActive = true;
+        document.getElementById("finish").style.visibility = "initial";
     }
 }
