@@ -86,7 +86,8 @@ function onKeyDown(event) {
         if (current === "" && text.length > 1) {
             current = text.pop();
             currentWhitespace = [];
-            currentWhitespace.push(current.slice(0, whitespaceIndex(current) + 2));
+            console.log(current.slice(0, whitespaceIndex(current) + 1).split(""));
+            currentWhitespace.push(current.slice(0, whitespaceIndex(current)));
             current = current.trim()
         }
 
@@ -156,7 +157,7 @@ function download() {
 
 function whitespaceIndex(string) {
     for (let i = 0; i < string.length; i++) {
-        if (whitespace[string.charAt(i)] === undefined)
+        if (! /\s/.test(string.charAt(i)))
             return i;
     }
 }
