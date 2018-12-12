@@ -1,4 +1,4 @@
-let goalCount = 1000;
+let goalCount = 3;
 
 let currentElement = null;
 let wordCountElement = null;
@@ -139,7 +139,14 @@ function resizeCurrent() {
 
 function download() {
     text.push(currentWhitespace.join("") + currentElement.innerText);
-    window.open('data:application/octet-stream,' + encodeURIComponent(text.join("")), 'SAVE');
+
+    let hiddenElement = document.createElement('a');
+
+    hiddenElement.href = 'data:attachment/text,' + encodeURIComponent(text.join(""));
+    hiddenElement.target = '_blank';
+    hiddenElement.download = 'skunk.txt';
+    hiddenElement.click();
+
     text.pop();
 }
 
