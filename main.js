@@ -1,4 +1,4 @@
-let goalCount = 3;
+let goalCount = 5;
 
 let currentElement = null;
 let wordCountElement = null;
@@ -85,7 +85,11 @@ function onKeyDown(event) {
         // If there is no current and previous word
         if (current === "" && text.length > 1) {
             current = text.pop();
+            currentWhitespace = [];
+            currentWhitespace.push(current.slice(0, whitespaceIndex(current) + 2));
+            current = current.trim()
         }
+
         // If there is no current and no previous word
         else if (current === "" && text.length === 1) {
             text.length = 0;
@@ -148,6 +152,13 @@ function download() {
     hiddenElement.click();
 
     text.pop();
+}
+
+function whitespaceIndex(string) {
+    for (let i = 0; i < string.length; i++) {
+        if (whitespace[string.charAt(i)] === undefined)
+            return i;
+    }
 }
 
 function activateDownload() {
