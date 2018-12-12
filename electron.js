@@ -1,5 +1,5 @@
 // Modules to control application life and create native browser window
-const {app, BrowserWindow, Menu} = require('electron');
+const {app, BrowserWindow, Menu, globalShortcut} = require('electron');
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -27,9 +27,56 @@ function createWindow() {
     });
 
     mainWindow.setMenu(null);
-    const menu = Menu.buildFromTemplate([]);
+    const menu = Menu.buildFromTemplate([{
+        label: 'Electron',
+        submenu: [{
+            role: 'quit',
+            submenu: null,
+            type: 'normal',
+            accelerator: null,
+            icon: null,
+            label: 'Quit Skunk',
+            sublabel: '',
+            enabled: true,
+            visible: true,
+            checked: false,
+            commandId: 9
+        }],
+        type: 'submenu',
+        role: null,
+        accelerator: null,
+        icon: null,
+        sublabel: '',
+        enabled: true,
+        visible: true,
+        checked: false,
+        commandId: 10,
+    }, {
+        role: 'window',
+        submenu: [{
+            role: 'close',
+            submenu: null,
+            type: 'normal',
+            accelerator: null,
+            icon: null,
+            label: 'Close Window',
+            sublabel: '',
+            enabled: true,
+            visible: true,
+            checked: false,
+            commandId: 35
+        }],
+        type: 'submenu',
+        accelerator: null,
+        icon: null,
+        label: 'Window',
+        sublabel: '',
+        enabled: true,
+        visible: true,
+        checked: false,
+        commandId: 40
+    }]);
     Menu.setApplicationMenu(menu);
-
 }
 
 // This method will be called when Electron has finished
@@ -39,11 +86,7 @@ app.on('ready', createWindow);
 
 // Quit when all windows are closed.
 app.on('window-all-closed', function () {
-    // On macOS it is common for applications and their menu bar
-    // to stay active until the user quits explicitly with Cmd + Q
-    if (process.platform !== 'darwin') {
-        app.quit()
-    }
+    app.quit()
 });
 
 app.on('activate', function () {
