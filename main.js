@@ -3,7 +3,7 @@ let goalCount = 1000;
 let currentElement = null;
 let wordCountElement = null;
 
-let isStart = true;
+let helloActive = true;
 let downloadActive = false;
 
 let currentWhitespace = [];
@@ -46,64 +46,69 @@ const ignored =
         123: "",
     };
 
-function parseURLparameters() {
-    let url = new URL(window.location.href);
-    let goalParameter = url.searchParams.get("goalCount");
-    goalCount = goalParameter ? goalParameter : goalCount;
-}
-
 function setup() {
+    // Setting up element references.
     currentElement = document.getElementById("current");
     wordCountElement = document.getElementById("bar");
 
+    // Getting text size
     currentTextSize = window.getComputedStyle(currentElement).fontSize;
     currentTextSize = Number.parseInt(currentTextSize.slice(0, 3));
     initialTextSize = currentTextSize;
 
-    parseURLparameters();
-
-    document.onkeydown = handle;
+    // Setting up listener
+    document.onkeydown = onKeyDown;
 }
 
-function handle(event) {
-    if (isStart) {
-        isStart = false;
+function onKeyDown(event) {
+    // "Hello!" handler
+    if (helloActive) {
+        helloActive = false;
         currentElement.innerText = "";
     }
 
-    let chc = event.which;
-    let key = event.key;
+    let charCode = event.which;
 
-    if (whitespace[chc] !== undefined) {
-        if (!/^\s*$/.test(currentElement.innerText)) {
+    // Whitespace handler
+    if (whitespace[charCode] !== undefined) {
+        // The current is not empty go to new word.
+        if (currentElement.innerText !== "") {
             newWord()
         }
 
-        currentWhitespace.push(whitespace[chc]);
-    } else if (chc === 8) {
+        currentWhitespace.push(whitespace[charCode]);
+    }
+    // Backspace Handler
+    else if (charCode === 8) {
         let current = currentElement.innerText;
 
+        // If there is no current and previous word
         if (current === "" && text.length > 1) {
             current = text.pop();
-        } else if (text.length === 1) {
+        }
+        // If there is no current and no previous word
+        else if (current === "" && text.length === 1) {
             text.length = 0;
             current = "";
-        } else {
+        }
+        // Delete 1 Char from current
+        else {
             current = current.slice(0, -1);
         }
 
         currentElement.innerText = current;
         updateProgressBar();
-    } else if (ignored[chc] === undefined) {
+    }
+    // Text input handler
+    else if (ignored[charCode] === undefined) {
         if (text.length === 0) {
             text.length = 1;
         }
         updateProgressBar();
-        currentElement.innerText += key;
+        currentElement.innerText += event.key;
     }
 
-    downsizeToFit();
-    upsizeToFit();
+    resizeCurrent();
 }
 
 function newWord() {
@@ -123,35 +128,18 @@ function updateProgressBar() {
     activateDownload()
 }
 
-function bleeding() {
-    const top = currentElement.offsetTop;
-    const left = currentElement.offsetLeft;
-    const width = currentElement.offsetWidth;
-    const height = currentElement.offsetHeight;
+function resizeCurrent() {
+    let elementWidth = currentElement.offsetWidth;
+    let windowWidth = window.innerWidth;
+    let widthBound = Math.floor(windowWidth * currentTextSize / elementWidth);
 
-    return top < window.pageYOffset
-        || (top + height) > (window.pageYOffset + window.innerHeight)
-        || left < window.pageXOffset
-        || (left + width) > (window.pageXOffset + window.innerWidth);
-}
-
-function downsizeToFit() {
-    while (currentTextSize > 0 && bleeding()) {
-        currentTextSize -= 1;
-        currentElement.style.fontSize = currentTextSize + "px";
-    }
-}
-
-function upsizeToFit() {
-    while (currentTextSize < initialTextSize && !bleeding()) {
-        currentTextSize += 1;
-        currentElement.style.fontSize = currentTextSize + "px";
-    }
+    currentTextSize = Math.min(widthBound, initialTextSize);
+    currentElement.style.fontSize = currentTextSize + "px";
 }
 
 function download() {
     text.push(currentWhitespace.join("") + currentElement.innerText);
-    window.open('data:application/octet-stream,' + encodeURIComponent(text.join("")), 'SAVE')
+    window.open('data:application/octet-stream,' + encodeURIComponent(text.join("")), 'SAVE');
     text.pop();
 }
 
