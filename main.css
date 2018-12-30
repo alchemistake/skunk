@@ -29,6 +29,12 @@
     font-size: 2.2em;
     padding: 0.6em;
     overflow: scroll;
+    height: calc(100% - 2em);
+    min-height: calc(100% - 2em);
+    max-height: calc(100% - 2em);
+    width: 100%;
+    min-width: 100%;
+    max-width: 100%;
 }
 
 #title {
