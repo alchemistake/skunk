@@ -162,7 +162,6 @@ function finish() {
 
     document.getElementById("writing").remove();
     let editor = document.createElement("div");
-    editor.className = "full-size";
     editor.id = "editor";
     editor.contentEditable = true;
 
